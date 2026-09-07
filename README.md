@@ -17,107 +17,24 @@
     under the License.
 -->
 
-# org.awokenwell.proximity
+# Cordova Proximity Sensor Plugin
 
-This plugin provides access to the device's (IR) proximity sensor. This sensor is typically used in applications to prevent touch events on the screen when the device is held close to one's face.
+A Cordova plugin that provides access to the device's infrared (IR) proximity sensor.
 
-## Installation
+The proximity sensor is commonly used to detect whether an object is close to the device, such as when a phone is held near the user's face during a phone call.
 
-    cordova plugin add https://github.com/awoken-well/cordova-plugin-proximity.git
+This repository is a maintained copy of the original
+[cordova-plugin-proximity](https://github.com/awoken-well/cordova-plugin-proximity)
+repository for use in projects that require a stable, directly referenced plugin repository.
 
 ## Supported Platforms
 
 - iOS
 - Android
 
-## Methods
+## Installation
 
-- navigator.proximity.getProximityState
-- navigator.proximity.enableSensor
-- navigator.proximity.disableSensor
+Install the plugin directly from this repository:
 
-## navigator.proximity.getProximityState
-
-Get the current proximity sensor state: true = near, false = far.
-
-This proximity state is returned to the 'successCallback' callback function.
-
-    navigator.proximity.getProximityState(successCallback);
-
-## navigator.proximity.enableSensor
-
-Enable the proximity sensor. In iOS the proximity sensor is disabled by default and must
-be enabled manually.
-
-    navigator.proximity.enableSensor();
-
-## navigator.proximity.disableSensor
-
-Disable the proximity sensor.
-
-    navigator.proximity.disableSensor();
-
-### Example 1
-
-    function onSuccess(state) {
-        alert('Proximity state: ' + (state ? 'near' : 'far'));
-    };
-
-    navigator.proximity.enableSensor();
-    
-    setInterval(function(){
-      navigator.proximity.getProximityState(onSuccess);
-    }, 1000);
-
-
-### Example 2
-
-This example shows a watcher. If other things approaches the phone, 'on_approch_callback' would be called. 
-
-
-    var proximitysensor = {
-    };
-
-    var proximitysensorWatchStart = function(_scope, on_approch_callback) {
-        if(navigator.proximity == null)
-            console.log("cannot find navigator.proximity");
-
-        navigator.proximity.enableSensor();
-
-        // Start watch timer to get proximity sensor value
-        var frequency = 100;
-        _scope.id = window.setInterval(function() {
-            navigator.proximity.getProximityState(function(val) { // on success
-                var timestamp = new Date().getTime();
-                if(timestamp - _scope.lastemittedtimestamp > 1000) { // test on each 1 secs
-                    if( proximitysensor.lastval == 1 && val == 0 ) { // far => near changed
-                        _scope.lastemittedtimestamp = timestamp;
-                        _scope.lastval = val;
-                        on_approch_callback(timestamp);
-                    }
-                }
-                _scope.lastval = val;
-            });
-        }, frequency);
-    }
-
-    var proximitysensorWatchStop = function(_scope) {
-        if(navigator.proximity == null)
-            console.log("cannot find navigator.proximity");
-
-        window.clearInterval( _scope.id );
-
-        navigator.proximity.disableSensor();
-    };
-
-    proximitysensorWatchStart(proximitysensor, function(timestamp) {
-       console.log('approched on ' + timestamp);
-    });
-
-    // .... after testing
-    //proximitysensorWatchStop(proximitysensor);
-
-
-### iOS Quirks
-
-- iOS will automatically dim the screen and disable touch events when the proximity sensor is in the 'near' state. This can be circumvented by using undocumented API calls, but will result in App Store rejection.
+```bash
+cordova plugin add https://github.com/murali838/cordova_proximity.git
